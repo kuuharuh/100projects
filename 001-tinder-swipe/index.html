@@ -8,6 +8,9 @@
         </header>
 
         <div class="cards">
+            <div class="text">
+                Tu vida es tan asquerosa, monótona y triste que has valorado en un sistema binario a todas las otras miserables personas que se encuentran en esta app.<br>Nunca vas a encontrar el amor si ni siquiera eres capaz de quererte a tí mismo un mínimo.<br>Me daría vergüenza ser tú. Ojalá algún día salgas a tocar el césped y te de por abrirte una cuenta en Linkedin.<br>Pulsa el botón de reload para cancelar todas tus elecciones hasta el momento, a ver si así consigues algún match.
+            </div>
             <article>
                 <img src="./photos/1.webp">
                 <h2>María <span>26</span></h2>
@@ -23,10 +26,10 @@
         </div>
 
         <footer>
-            <button class="is-undo" aria-label="undo"></button>
-            <button class="is-close is-big" aria-label="close"></button>
+            <button id="reload" class="is-undo" aria-label="undo"></button>
+            <button id="nope" class="is-close is-big" aria-label="close"></button>
             <button class="is-star" aria-label="star"></button>
-            <button class="is-like is-big" aria-label="like"></button>
+            <button id="like" class="is-like is-big" aria-label="like"></button>
             <button class="is-zap" aria-label="zap"></button>
         </footer>
     </section>
@@ -135,6 +138,15 @@
         height: 100%;
         margin: 0 auto;
 
+        & .text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            padding: 50px 5px;
+            text-align: center;
+        }
+
         & article {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             border-radius: 8px;
@@ -153,6 +165,16 @@
             &.go-right {
                 transition: transform .3s ease;
                 transform: translateX(200%) rotate(30deg) !important;
+            }
+
+            &.go-left-button {
+                transition: transform .7s ease;
+                transform: translateX(-132%) rotate(-25deg) !important;
+            }
+
+            &.go-right-button {
+                transition: transform .7s ease;
+                transform: translateX(132%) rotate(25deg) !important;
             }
 
             &.reset {
@@ -301,7 +323,54 @@
             
         }
     }
-    
+
+    function nopeButton (e) {
+        if (!selected) {
+            selected = true;
+            const articles = document.querySelectorAll('.cards article'); 
+            const lastArticle = articles[articles.length - 1]; 
+            if (lastArticle) {
+                lastArticle.classList.add('go-left-button');
+                lastArticle.addEventListener('transitionend',
+                    () => {
+                        lastArticle.remove();
+                        selected = false;
+                    }, 
+                    { once: true }
+                );
+            }   
+            lastArticle.querySelector('.choice.nope').style.opacity = 100;
+        }  
+    }
+
+    function likeButton (e) {
+        if (!selected) {
+            selected = true;
+            const articles = document.querySelectorAll('.cards article'); 
+            const lastArticle = articles[articles.length - 1]; 
+            if (lastArticle) {
+                lastArticle.classList.add('go-right-button');
+                lastArticle.addEventListener('transitionend',
+                    () => {
+                        lastArticle.remove();
+                        selected = false;
+                    }, 
+                    { once: true }
+                );
+            }  
+            lastArticle.querySelector('.choice.like').style.opacity = 100;
+        } 
+    }
+
+    function reloadButton () {
+        document.location.reload();
+    }
+
+    let selected = false;
+    document.getElementById('nope').addEventListener("click", nopeButton);
+    document.getElementById('like').addEventListener("click", likeButton);
+    document.getElementById('reload').addEventListener("click", reloadButton);
+
     document.addEventListener('mousedown', startDrag);
     document.addEventListener('touchstart', startDrag, {passive: true});
 </script>
