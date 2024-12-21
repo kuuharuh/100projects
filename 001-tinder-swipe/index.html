@@ -234,6 +234,7 @@
         if (isAnimating) return;
 
         const actualCard = e.target.closest('article');
+        if (!actualCard) return;
 
         const startX = e.pageX ?? event.touches[0].pageX;
 
@@ -284,9 +285,13 @@
                 actualCard.classList.add('reset'); 
             }
 
+            actualCard.querySelector('.choice.like').style.opacity = 0;
+            actualCard.querySelector('.choice.nope').style.opacity = 0;
+            
             actualCard.addEventListener('transitionend',
                 () => {
                     isAnimating = false;
+                    deltaX = 0;
                     actualCard.style.cursor = 'grab';
                     actualCard.removeAttribute('style');
                     actualCard.classList.remove('reset');
